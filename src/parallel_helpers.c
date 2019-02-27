@@ -55,12 +55,11 @@ void prescan(int* in_arr, int* out_arr, int arr_len, int identity, int (*operato
 }
 
 void split(int* in_arr, int* out_arr, int arr_len, int bit_index) {
-    // Functions for different map uses
     inline int is_one(int x) {
-        return (x << bit_index) & 1;
+        return x & (1 << bit_index);
     }
 
-     inline int not(int x) {
+    inline int not(int x) {
         return !x;
     }
 
@@ -69,12 +68,9 @@ void split(int* in_arr, int* out_arr, int arr_len, int bit_index) {
     }
 
     int zero_flags[arr_len];
-    int one_flags[arr_len];
-
     int zero_index[arr_len];
+    int one_flags[arr_len];
     int one_index[arr_len];
-
-    int index[arr_len];
 
     map(in_arr, one_flags, arr_len, &is_one);
     map(one_flags, zero_flags, arr_len, &not);
