@@ -15,21 +15,26 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    // Generate random array of length arr_len
-    int arr[arr_len];
-    rng(arr, arr_len);
+    printf("Generating input...\n");
 
-    // Original
-    for (int i = 0; i < arr_len; i ++)
-        printf("%d ", arr[i]);
-    printf("\n");
+    // Generate random array of length arr_len
+    int* arr = malloc(sizeof(int) * arr_len);
+    rng(arr, arr_len);
+    // for (int i = 0; i < arr_len; i ++)
+    //     printf("%d ", arr[i]);
+    // printf("\n");
+
+    printf("Splitting...\n");
 
     // Split result
-    int result[arr_len];
-    split(arr, result, arr_len, 0);
-    for (int i = 0; i < arr_len; i ++)
-        printf("%d ", result[i]);
-    printf("\n");
+    int* res = malloc(sizeof(int) * arr_len);
+    split(arr, res, arr_len, 0);
+    // for (int i = 0; i < arr_len; i ++)
+    //     printf("%d ", res[i]);
+    // printf("\n");
+
+    free(arr);
+    free(res);
 
     return 0;
 }

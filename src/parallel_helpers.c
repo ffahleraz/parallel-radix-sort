@@ -67,8 +67,8 @@ void split(int* in_arr, int* out_arr, int arr_len, int bit_index) {
         return x + y;
     }
 
-    int zero_flags[arr_len];
-    int one_flags[arr_len];
+    int* zero_flags = malloc(sizeof(int) * arr_len);
+    int* one_flags = malloc(sizeof(int) * arr_len);
 
     #pragma omp parallel sections 
     {
@@ -79,8 +79,8 @@ void split(int* in_arr, int* out_arr, int arr_len, int bit_index) {
         map(in_arr, one_flags, arr_len, &is_one);
     }
     
-    int zero_index[arr_len];
-    int one_index[arr_len];
+    int* zero_index = malloc(sizeof(int) * arr_len);
+    int* one_index = malloc(sizeof(int) * arr_len);
 
     #pragma omp parallel sections 
     {
@@ -101,4 +101,9 @@ void split(int* in_arr, int* out_arr, int arr_len, int bit_index) {
             out_arr[one_index[i] + one_index_offset] = in_arr[i];
         }
     }
+
+    free(zero_flags);
+    free(one_flags);
+    free(zero_index);
+    free(one_index);
 }
