@@ -16,8 +16,10 @@ int main(int argc, char *argv[]) {
     }
 
     // Generate random array of length arr_len
-    int arr[arr_len];
-    rng(arr, arr_len);
+    // int arr[arr_len];
+    // rng(arr, arr_len);
+    int arr[] = {3,4,9,3,6,2,8,3,6,1,5};
+    arr_len = 11;
 
     // Original
     for (int i = 0; i < arr_len; i ++)

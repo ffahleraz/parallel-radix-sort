@@ -75,8 +75,28 @@ void split(int* in_arr, int* out_arr, int arr_len, int bit_index) {
     map(in_arr, one_flags, arr_len, &is_one);
     map(one_flags, zero_flags, arr_len, &not);
 
+    printf("zero flags : ");
+    for (int i = 0; i < arr_len; i ++)
+        printf("%d ", zero_flags[i]);
+    printf("\n");
+
+    printf("one flags  : ");
+    for (int i = 0; i < arr_len; i ++)
+        printf("%d ", one_flags[i]);
+    printf("\n");
+
     prescan(zero_flags, zero_index, arr_len, 0, &add);
-    prescan(one_flags, one_index, arr_len, zero_index[arr_len - 1] + 1, &add);
+    prescan(one_flags, one_index, arr_len, zero_index[arr_len - 1], &add);
+
+    printf("zero index : ");
+    for (int i = 0; i < arr_len; i ++)
+        printf("%d ", zero_index[i]);
+    printf("\n");
+
+    printf("one index  : ");
+    for (int i = 0; i < arr_len; i ++)
+        printf("%d ", one_index[i]);
+    printf("\n");
 
     #pragma omp parallel
     #pragma omp for
