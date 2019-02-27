@@ -30,6 +30,8 @@ int main(int argc, char *argv[]) {
         printf("%d ", arr[i]);
     printf("\n");
 
+    printf("prefix sum:\n");
+
     // Prefix sum
     prefix_sum(arr, arr, arr_len);
     for (int i = 0; i < arr_len; i ++)
@@ -47,7 +49,6 @@ void rng(int* arr, int len) {
     int seed = 13516095;
     srand(seed);
     for(long i = 0; i < len; i++) {
-        // arr[i] = (int)rand();
-        arr[i] = 1;
+        arr[i] = (int)rand();
     }
 }
