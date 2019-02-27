@@ -3,8 +3,9 @@
 #include "parallel_helpers.h"
 
 // Random number generator
-int is_one(int x);
-void rng(int* arr, int len);
+int is_one(int);
+int add(int, int);
+void rng(int*, int);
 
 int main(int argc, char *argv[]) {
     int arr_len;
@@ -33,7 +34,7 @@ int main(int argc, char *argv[]) {
     printf("prefix sum:\n");
 
     // Prefix sum
-    prefix_sum(arr, arr, arr_len);
+    prescan(arr, arr, arr_len, 0, &add);
     for (int i = 0; i < arr_len; i ++)
         printf("%d ", arr[i]);
     printf("\n");
@@ -43,6 +44,10 @@ int main(int argc, char *argv[]) {
 
 int is_one(int x) {
     return x & 1;
+}
+
+int add(int a, int b) {
+    return a + b;
 }
 
 void rng(int* arr, int len) {
