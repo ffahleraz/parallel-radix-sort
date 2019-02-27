@@ -17,7 +17,6 @@ void prescan(int* in_arr, int* out_arr, int arr_len, int identity, int (*operato
     int steps_num = (int) ceil(log(arr_len) / log(2));
 
     // Up sweep
-    out_arr[0] += identity;
     for (int i = 0; i < steps_num; i++) {
         int offset_prev = 1 << i;
         int offset = 1 << (i + 1);
@@ -57,12 +56,12 @@ void prescan(int* in_arr, int* out_arr, int arr_len, int identity, int (*operato
 
 void split(int* in_arr, int* out_arr, int arr_len, int bit_index) {
     // Functions for different map uses
-    inline int is_zero(int x) {
-        return (x & 1) << sizeof(int);
+    inline int is_one(int x) {
+        return (x << bit_index) & 1;
     }
 
-    inline int is_one(int x) {
-        return x & 1;
+     inline int not(int x) {
+        return !x;
     }
 
     inline int add(int x, int y) {
@@ -77,11 +76,16 @@ void split(int* in_arr, int* out_arr, int arr_len, int bit_index) {
 
     int index[arr_len];
 
-    map(in_arr, zero_flags, arr_len, &is_zero);
     map(in_arr, one_flags, arr_len, &is_one);
+    map(one_flags, zero_flags, arr_len, &not);
 
     prescan(zero_flags, zero_index, arr_len, 0, &add);
-    prescan(one_flags, one_index, arr_len, zero_index[arr_len - 1], &add);
+    prescan(one_flags, one_index, arr_len, zero_index[arr_len - 1] + 1, &add);
 
-
+    #pragma omp parallel
+    #pragma omp for
+    for (int i = 0; i < arr_len; i++) {
+        int index = zero_flags[i] ? zero_index[i] : one_index[i];
+        out_arr[index] = in_arr[i];
+    }
 }

@@ -17,26 +17,30 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    int arr[arr_len];
-    rng(arr, arr_len);
+    // int arr[arr_len];
+    // rng(arr, arr_len);
+
+    int arr[] = {5,7,3,1,4,2,7,2};
+    arr_len = 8;
 
     // Original
     for (int i = 0; i < arr_len; i ++)
         printf("%d ", arr[i]);
     printf("\n");
 
-    // Map
-    map(arr, arr, arr_len, &is_one);
-    for (int i = 0; i < arr_len; i ++)
-        printf("%d ", arr[i]);
-    printf("\n");
+    // // Map
+    // map(arr, arr, arr_len, &is_one);
+    // for (int i = 0; i < arr_len; i ++)
+    //     printf("%d ", arr[i]);
+    // printf("\n");
 
-    printf("prefix sum:\n");
+    // printf("prefix sum:\n");
 
     // Prefix sum
-    prescan(arr, arr, arr_len, 0, &add);
+    int result[8];
+    split(arr, result, arr_len, 0);
     for (int i = 0; i < arr_len; i ++)
-        printf("%d ", arr[i]);
+        printf("%d ", result[i]);
     printf("\n");
 
     return 0;
