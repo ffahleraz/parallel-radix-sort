@@ -55,12 +55,12 @@ void prescan(int* in_arr, int* out_arr, int arr_len, int identity, int (*operato
 }
 
 void split(int* in_arr, int* out_arr, int arr_len, int bit_index) {
-    inline int is_one(int x) {
-        return x & (1 << bit_index);
+    inline int is_zero(int x) {
+        return !(x & (1 << bit_index));
     }
 
-    inline int not(int x) {
-        return !x;
+    inline int is_one(int x) {
+        return x & (1 << bit_index);
     }
 
     inline int add(int x, int y) {
@@ -69,19 +69,36 @@ void split(int* in_arr, int* out_arr, int arr_len, int bit_index) {
 
     int zero_flags[arr_len];
     int one_flags[arr_len];
-    map(in_arr, one_flags, arr_len, &is_one);
-    map(one_flags, zero_flags, arr_len, &not);
 
+    #pragma omp parallel sections 
+    {
+        #pragma omp section
+        map(in_arr, zero_flags, arr_len, &is_zero);
+        
+        #pragma omp section
+        map(in_arr, one_flags, arr_len, &is_one);
+    }
+    
     int zero_index[arr_len];
     int one_index[arr_len];
-    prescan(zero_flags, zero_index, arr_len, 0, &add);
-    int one_prescan_identity = zero_index[arr_len - 1] + zero_flags[arr_len - 1];
-    prescan(one_flags, one_index, arr_len, one_prescan_identity, &add);
 
+    #pragma omp parallel sections 
+    {
+        #pragma omp section
+        prescan(zero_flags, zero_index, arr_len, 0, &add);
+        
+        #pragma omp section
+        prescan(one_flags, one_index, arr_len, 0, &add);
+    }
+
+    int one_index_offset = zero_index[arr_len - 1] + zero_flags[arr_len - 1];
     #pragma omp parallel
     #pragma omp for
     for (int i = 0; i < arr_len; i++) {
-        int index = zero_flags[i] ? zero_index[i] : one_index[i];
-        out_arr[index] = in_arr[i];
+        if (zero_flags[i]) {
+            out_arr[zero_index[i]] = in_arr[i];
+        } else {
+            out_arr[one_index[i] + one_index_offset] = in_arr[i];
+        }
     }
 }
