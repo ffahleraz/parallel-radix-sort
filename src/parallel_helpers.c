@@ -55,7 +55,7 @@ void prescan(int* in_arr, int* out_arr, int arr_len, int identity, int (*operato
     }
 }
 
-void split(int* in_arr, int* out_arr, int arr_len) {
+void split(int* in_arr, int* out_arr, int arr_len, int bit_index) {
     // Functions for different map uses
     inline int is_zero(int x) {
         return (x & 1) << sizeof(int);
