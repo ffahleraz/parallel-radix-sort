@@ -55,6 +55,33 @@ void prescan(int* in_arr, int* out_arr, int arr_len, int identity, int (*operato
     }
 }
 
-// void filter(int* in_arr, int* out_arr, int in_arr_len, int* out_arr_len, int (*pred)(int)) {
+void split(int* in_arr, int* out_arr, int arr_len) {
+    // Functions for different map uses
+    inline int is_zero(int x) {
+        return (x & 1) << sizeof(int);
+    }
 
-// }
+    inline int is_one(int x) {
+        return x & 1;
+    }
+
+    inline int add(int x, int y) {
+        return x + y;
+    }
+
+    int zero_flags[arr_len];
+    int one_flags[arr_len];
+
+    int zero_index[arr_len];
+    int one_index[arr_len];
+
+    int index[arr_len];
+
+    map(in_arr, zero_flags, arr_len, &is_zero);
+    map(in_arr, one_flags, arr_len, &is_one);
+
+    prescan(zero_flags, zero_index, arr_len, 0, &add);
+    prescan(one_flags, one_index, arr_len, zero_index[arr_len - 1], &add);
+
+
+}
