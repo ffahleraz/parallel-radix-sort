@@ -107,3 +107,9 @@ void split(int* in_arr, int* out_arr, int arr_len, int bit_index) {
     free(zero_index);
     free(one_index);
 }
+
+void parallel_radix_sort(int* arr, int arr_len) {
+    for (int i = 0; i < sizeof(int); i++) {
+        // split()
+    }
+}

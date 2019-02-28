@@ -28,9 +28,8 @@ void counting_sort(int* arr, int arr_len, int exp) {
         arr[i] = output[i]; 
 } 
   
-void serial_radix_sort(int* in_arr, int* out_arr, int arr_len) {
-    int m = get_max(in_arr, arr_len);
-    memcpy(out_arr, in_arr, arr_len * sizeof(int));
+void serial_radix_sort(int* arr, int arr_len) {
+    int m = get_max(arr, arr_len);
     for (int exp = 1; (m / exp) > 0; exp *= 10) 
-        counting_sort(out_arr, arr_len, exp);
+        counting_sort(arr, arr_len, exp);
 }
