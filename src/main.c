@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
     printf("Generating input of size %d...\n", arr_len);
     arr = malloc(sizeof(int) * arr_len);
     generate_random(arr, arr_len);
-    // print(arr, arr_len);
+    print(arr, arr_len);
 
     parallel_radix_sort_test(arr, arr_len);
     // serial_radix_sort_test(arr, arr_len);

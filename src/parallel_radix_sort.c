@@ -56,19 +56,30 @@ void prescan(int* arr, int arr_len, int identity, int (*operator)(int, int)) {
 
 void split(int* arr, int arr_len, int digit_index) {
     int divisor = pow(10, digit_index);
+    
     int* flags[10];
     int* scatter_index[10];
+    int scatter_offset[10];
+    
+    int* digits = malloc(sizeof(int) * arr_len * 10);
     int* result = malloc(sizeof(int) * arr_len * 10);
 
-    inline int add(int x, int y) {
-        return x + y;
+    // Save each number's digit_index-th digit
+    inline int get_digit(int x) {
+        return (x / divisor) % 10;
     }
+    memcpy(digits, arr, arr_len * sizeof(int));
+    map(digits, arr_len, &get_digit);
 
-    // #pragma omp parallel
-    // #pragma omp for
+    #pragma omp parallel
+    #pragma omp for
     for (int i = 0; i < 10; i++) {
         inline int is_digit(int x) {
             return (x / divisor) % 10 == i;
+        }
+
+        inline int add(int x, int y) {
+            return x + y;
         }
 
         flags[i] = malloc(sizeof(int) * arr_len * 10);
@@ -79,70 +90,26 @@ void split(int* arr, int arr_len, int digit_index) {
         
         memcpy(scatter_index[i], flags[i], arr_len * sizeof(int));
         prescan(scatter_index[i], arr_len, 0, &add);
-
-        print(flags[i], arr_len);
-        print(scatter_index[i], arr_len);
     }
 
-    // #pragma omp parallel
-    // #pragma omp for
-    for (int i = 0; i < 10; i++) {
-        
-        memcpy(flags[i], arr, arr_len * sizeof(int));
-        map(flags[i], arr_len, &is_digit);
-        
-        memcpy(scatter_index[i], flags[i], arr_len * sizeof(int));
-        prescan(scatter_index[i], arr_len, 0, &add);
-
-        print(flags[i], arr_len);
-        print(scatter_index[i], arr_len);
+    // Save scatter index offset for each digit
+    scatter_offset[0] = 0;
+    for (int i = 1; i < 10; i++) {
+        scatter_offset[i] = scatter_offset[i - 1] + scatter_index[i - 1][arr_len - 1] + (digits[arr_len - 1] == i - 1);
     }
 
+    #pragma omp parallel
+    #pragma omp for
+    for (int i = 0; i < arr_len; i++) {
+        result[scatter_index[digits[i]][i] + scatter_offset[digits[i]]] = arr[i];
+    }
+
+    // Free stuff
     for (int i = 0; i < 10; i++) {
         free(flags[i]);
         free(scatter_index[i]);
     }
-
-    // #pragma omp parallel sections 
-    // {
-    //     #pragma omp section
-    //     map(in_arr, zero_flags, arr_len, &is_zero);
-        
-    //     #pragma omp section
-    //     map(in_arr, one_flags, arr_len, &is_one);
-    // }
-    
-    // int* zero_index = malloc(sizeof(int) * arr_len);
-    // int* one_index = malloc(sizeof(int) * arr_len);
-
-    // inline int add(int x, int y) {
-    //     return x + y;
-    // }
-
-    // #pragma omp parallel sections 
-    // {
-    //     #pragma omp section
-    //     prescan(zero_flags, zero_index, arr_len, 0, &add);
-        
-    //     #pragma omp section
-    //     prescan(one_flags, one_index, arr_len, 0, &add);
-    // }
-
-    // int one_index_offset = zero_index[arr_len - 1] + zero_flags[arr_len - 1];
-    // #pragma omp parallel
-    // #pragma omp for
-    // for (int i = 0; i < arr_len; i++) {
-    //     if (zero_flags[i]) {
-    //         out_arr[zero_index[i]] = in_arr[i];
-    //     } else {
-    //         out_arr[one_index[i] + one_index_offset] = in_arr[i];
-    //     }
-    // }
-
-    // free(zero_flags);
-    // free(one_flags);
-    // free(zero_index);
-    // free(one_index);
+    free(result);
 }
 
 void parallel_radix_sort(int* arr, int arr_len) {
