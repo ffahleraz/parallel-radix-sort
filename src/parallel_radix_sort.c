@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "parallel_helpers.h"
+#include "parallel_radix_sort.h"
 
 void map(int* in_arr, int* out_arr, int arr_len, int (*predicate)(int)) {
     #pragma omp parallel
