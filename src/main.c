@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
     printf("Generating input of size %d...\n", arr_len);
     arr = malloc(sizeof(int) * arr_len);
     generate_random(arr, arr_len);
-    print(arr, arr_len);
+    // print(arr, arr_len);
 
     parallel_radix_sort_test(arr, arr_len);
     serial_radix_sort_test(arr, arr_len);
@@ -43,7 +43,7 @@ void parallel_radix_sort_test(int* arr, int arr_len) {
 
         memcpy(result_arr, arr, arr_len * sizeof(int));
         parallel_radix_sort(result_arr, arr_len);
-        print(result_arr, arr_len);
+        // print(result_arr, arr_len);
         
         t = clock() - t;
         double sort_time = (double) t / (CLOCKS_PER_SEC / 1000);
@@ -66,7 +66,7 @@ void serial_radix_sort_test(int* arr, int arr_len) {
 
         memcpy(result_arr, arr, arr_len * sizeof(int));
         serial_radix_sort(result_arr, arr_len);
-        print(result_arr, arr_len);
+        // print(result_arr, arr_len);
         
         t = clock() - t;
         double sort_time = (double) t / (CLOCKS_PER_SEC / 1000);
