@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
     print(arr, arr_len);
 
     parallel_radix_sort_test(arr, arr_len);
-    // serial_radix_sort_test(arr, arr_len);
+    serial_radix_sort_test(arr, arr_len);
 
     free(arr);
     return 0;
@@ -37,13 +37,13 @@ void parallel_radix_sort_test(int* arr, int arr_len) {
     double total = 0;
     int* result_arr = malloc(sizeof(int) * arr_len);
     
-    for (int i = 1; i <= 1; i++) {
+    for (int i = 1; i <= 3; i++) {
         printf("\nSorting in parallel...\n");
         t = clock();
 
         memcpy(result_arr, arr, arr_len * sizeof(int));
-        split(result_arr, arr_len, 0);
-        // print(result_arr, arr_len);
+        parallel_radix_sort(result_arr, arr_len);
+        print(result_arr, arr_len);
         
         t = clock() - t;
         double sort_time = (double) t / (CLOCKS_PER_SEC / 1000);
@@ -52,7 +52,7 @@ void parallel_radix_sort_test(int* arr, int arr_len) {
     }
 
     free(result_arr);
-    // printf("\nParallel radix sort average time: %f ms\n", total / 3);
+    printf("\nParallel radix sort average time: %f ms\n", total / 3);
 }
 
 void serial_radix_sort_test(int* arr, int arr_len) {
