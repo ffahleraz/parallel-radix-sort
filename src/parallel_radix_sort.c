@@ -151,7 +151,4 @@ void parallel_radix_sort(int* arr, int arr_len) {
         split(arr, arr_len, bit_index);
         bit_index++;
     }
-
-    // split(arr, arr_len, 0);
-    // split(arr, arr_len, 1);
 }
